@@ -1,6 +1,6 @@
 import type { SQLiteDatabase } from 'expo-sqlite';
 
-const DATABASE_VERSION = 1;
+const DATABASE_VERSION = 2;
 
 export async function migrateDbIfNeeded(db: SQLiteDatabase): Promise<void> {
   const row = await db.getFirstAsync<{ user_version: number }>('PRAGMA user_version');
@@ -81,6 +81,31 @@ export async function migrateDbIfNeeded(db: SQLiteDatabase): Promise<void> {
       );
     `);
     currentDbVersion = 1;
+  }
+  if (currentDbVersion === 1) {
+    await db.execAsync(`
+      CREATE TABLE IF NOT EXISTS availability (
+        id TEXT PRIMARY KEY NOT NULL,
+        label TEXT NOT NULL,
+        days TEXT NOT NULL,
+        start_min INTEGER NOT NULL,
+        end_min INTEGER NOT NULL
+      );
+      CREATE TABLE IF NOT EXISTS unlocked_achievements (
+        key TEXT PRIMARY KEY NOT NULL,
+        unlocked_at TEXT NOT NULL
+      );
+      CREATE TABLE IF NOT EXISTS creatures (
+        id TEXT PRIMARY KEY NOT NULL,
+        name TEXT NOT NULL,
+        species TEXT NOT NULL,
+        state TEXT NOT NULL DEFAULT 'healthy',
+        stage TEXT NOT NULL DEFAULT 'base',
+        revivals INTEGER NOT NULL DEFAULT 0,
+        last_active_date TEXT NOT NULL
+      );
+    `);
+    currentDbVersion = 2;
   }
   await db.execAsync(`PRAGMA user_version = ${DATABASE_VERSION}`);
 }

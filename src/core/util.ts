@@ -37,3 +37,9 @@ export function fmtMin(total: number): string {
   const h12 = h % 12 === 0 ? 12 : h % 12;
   return `${h12}:${String(min).padStart(2, '0')} ${ampm}`;
 }
+
+export function addDaysISO(iso: string, days: number): string {
+  const d = new Date(`${iso}T00:00:00`);
+  d.setDate(d.getDate() + days);
+  return todayISO(d);
+}

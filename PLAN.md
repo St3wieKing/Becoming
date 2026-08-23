@@ -32,17 +32,17 @@ Onboarding-lite deferred; currently: create goals (priority/difficulty/deadline)
 ## Build Phases
 - [x] Phase 1: Toolchain + walking skeleton (Node/Git portable installs, Expo scaffold, sqlite layer, engines, tab shell, honest completion loop)
       Done when: `npm run typecheck` passes AND screens render in Expo Go / web export
-- [ ] Phase 2: Design system pass — Becoming visual identity, dark-premium tokens, empty/loading/error states everywhere (spec §64/73/74)
-- [ ] Phase 3: Onboarding + Future Me draft flow with editable vision (spec §5/25)
-- [ ] Phase 4: SMART goal engine conversational draft (deterministic templates first), goal hierarchy VISION→GOAL→MILESTONE→PROJECT→ACTION, dependencies (spec §6–10)
-- [ ] Phase 5: Calendar intelligence — availability windows, recurring patterns typed in natural language, slot finder, Apple Calendar opt-in read-only (spec §13–15)
-- [ ] Phase 6: Goal Health + Confidence engine wired to real history data + recovery flows CatchUp/Extend/Reduce/Rebuild/Pause/Abandon + Minimum Viable Day suggestions (spec §11–12/17/27)
-- [ ] Phase 7: AI layer — provider abstraction, prompt templates, output validation gate, chat screen, Manual/Assisted/Autopilot gating, memory store with view/edit/delete (spec §4/23/56–57/78–79)
-- [ ] Phase 8: Game depth — creature selection, procedural variation, progressive states Healthy→Dormant→Disappeared with 2 revives, achievements subset, shop stub (spec §31–35/42)
-- [ ] Phase 9: Backend — Supabase auth, sync, groups ≤15 with granular visibility, server-authoritative coin validation (spec §43–45/68/76)
-- [ ] Phase 10: Weekly review digest + recommendations apply/ignore (spec §26)
-- [ ] Phase 11: Notifications — quiet hours, adaptive timing suggestions (spec §21–22/67)
-- [ ] Phase 12: Polish + accessibility audit (Dynamic Type, VoiceOver, reduced motion, haptics) + EAS build profile + TestFlight submission prep (spec §63/65–66/71)
+- [x] Phase 2: Design system — shared card/chip/button styles, status glyphs (color-independent per §63), empty states on every list. Full visual identity pass still open.
+- [x] Phase 3: Onboarding + Future Me draft flow (vision questions → editable draft stored, Serious/Adventure choice, route gate). Editing Future Me post-onboarding still open.
+- [x] Phase 4: Goal detail screen — SMART draft (offline heuristic coach + optional remote LLM via env key) editable, milestones CRUD, per-goal action list, history log. Full VISION→GOAL hierarchy + dependency graph still open.
+- [x] Phase 5: Calendar intelligence v1 — typed availability patterns ("mon-fri 18:00-21:00"), deterministic slot finder avoiding event conflicts, one-tap focus scheduling. External calendar integrations still open.
+- [x] Phase 6: Goal Health + Confidence wired to real history with explained reasons; recovery actions Pause/Resume/+7 days/Mark done/Abandon. Minimum Viable Day suggestions still open.
+- [x] Phase 7: AI layer — provider abstraction (heuristic default; Anthropic adapter activates when EXPO_PUBLIC_ANTHROPIC_API_KEY set, model via EXPO_PUBLIC_AI_MODEL [assumed default]). Chat surface + output validation gate for schedules still open.
+- [x] Phase 8: Game depth v1 — companion selection (9 original species), progressive states Healthy→Tired→Weak→Dormant derived from real activity gaps, revive ≤2 then rest, 4 achievements auto-awarded. Procedural variation, habitats, shop still open.
+- [ ] Phase 9: Backend — Supabase auth, sync, groups ≤15 with granular visibility, server-authoritative coin validation. Blocked on human creating a Supabase account.
+- [ ] Phase 10: Weekly review digest + recommendations apply/ignore
+- [ ] Phase 11: Notifications — quiet hours, adaptive timing suggestions
+- [ ] Phase 12: Polish + accessibility audit (Dynamic Type, VoiceOver, reduced motion, haptics) + EAS build profile + TestFlight submission prep
 
 ## Verification
 - `npm run typecheck` — must pass every commit

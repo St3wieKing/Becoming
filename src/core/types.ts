@@ -12,6 +12,7 @@ export type GoalStatus =
   | 'falling_behind'
   | 'critical'
   | 'paused'
+  | 'abandoned'
   | 'completed';
 
 export type Confidence = 'high' | 'moderate' | 'needs_attention';
