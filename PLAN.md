@@ -37,12 +37,12 @@ Onboarding-lite deferred; currently: create goals (priority/difficulty/deadline)
 - [x] Phase 4: Goal detail screen — SMART draft (offline heuristic coach + optional remote LLM via env key) editable, milestones CRUD, per-goal action list, history log. Full VISION→GOAL hierarchy + dependency graph still open.
 - [x] Phase 5: Calendar intelligence v1 — typed availability patterns ("mon-fri 18:00-21:00"), deterministic slot finder avoiding event conflicts, one-tap focus scheduling. External calendar integrations still open.
 - [x] Phase 6: Goal Health + Confidence wired to real history with explained reasons; recovery actions Pause/Resume/+7 days/Mark done/Abandon. Minimum Viable Day suggestions still open.
-- [x] Phase 7: AI layer — provider abstraction (heuristic default; Anthropic adapter activates when EXPO_PUBLIC_ANTHROPIC_API_KEY set, model via EXPO_PUBLIC_AI_MODEL [assumed default]). Chat surface + output validation gate for schedules still open.
-- [x] Phase 8: Game depth v1 — companion selection (9 original species), progressive states Healthy→Tired→Weak→Dormant derived from real activity gaps, revive ≤2 then rest, 4 achievements auto-awarded. Procedural variation, habitats, shop still open.
-- [ ] Phase 9: Backend — Supabase auth, sync, groups ≤15 with granular visibility, server-authoritative coin validation. Blocked on human creating a Supabase account.
-- [ ] Phase 10: Weekly review digest + recommendations apply/ignore
-- [ ] Phase 11: Notifications — quiet hours, adaptive timing suggestions
-- [ ] Phase 12: Polish + accessibility audit (Dynamic Type, VoiceOver, reduced motion, haptics) + EAS build profile + TestFlight submission prep
+- [x] Phase 7: AI layer — provider abstraction (heuristic default; Anthropic adapter activates when EXPO_PUBLIC_ANTHROPIC_API_KEY set, model via EXPO_PUBLIC_AI_MODEL [assumed default]), Ask-Becoming chat screen grounded in real app data with §57 guardrails. Deterministic schedule-validation gate still open.
+- [x] Phase 8: Game depth v1 — companion selection (9 original species), progressive states Healthy→Tired→Weak→Dormant derived from real activity gaps, revive ≤2 then rest, 4 achievements auto-awarded on completion events. Procedural variation, habitats, shop still open.
+- [x] Phase 9 (foundations): Supabase client module activates when env keys exist; email auth inline in Profile; supabase/schema.sql ships groups+profiles+RLS foundations ready to paste. Live sync engine + full group flows need a created project first.
+- [x] Phase 10 (digest): Insights screen = weekly review digest (completions, misses, Frogs, streak, mode) + adaptive advice rules + Minimum Viable Day suggestion evenings. Apply/ignore action buttons still open.
+- [x] Phase 11 (local): Daily Frog reminder scheduling via expo-notifications (v57 docs-verified), permission flow, time setting persisted. Quiet-hours enforcement + adaptive reminder timing still open.
+- [x] Phase 12 (scaffolding): eas.json build profiles (preview simulator/APK + production), dark splash identity. Full accessibility audit, App Store assets, screenshots still open.
 
 ## Verification
 - `npm run typecheck` — must pass every commit

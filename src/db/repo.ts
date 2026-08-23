@@ -495,3 +495,50 @@ export async function unlockAchievements(db: SQLiteDatabase, keys: string[]): Pr
     ]);
   }
 }
+
+export async function frogDoneTotal(db: SQLiteDatabase): Promise<number> {
+  const row = await db.getFirstAsync<{ n: number | null }>(
+    'SELECT COUNT(*) AS n FROM completions c JOIN tasks t ON t.id = c.task_id WHERE c.done = 1 AND t.is_frog = 1',
+  );
+  return row?.n ?? 0;
+}
+
+export async function completedGoalsCount(db: SQLiteDatabase): Promise<number> {
+  const row = await db.getFirstAsync<{ n: number | null }>(
+    "SELECT COUNT(*) AS n FROM goals WHERE status = 'completed'",
+  );
+  return row?.n ?? 0;
+}
+
+export async function addCoinTx(
+  db: SQLiteDatabase,
+  amount: number,
+  reason: string,
+): Promise<void> {
+  await db.runAsync('INSERT INTO coin_tx (id, amount, reason, created_at) VALUES (?, ?, ?, ?)', [
+    uid(),
+    amount,
+    reason,
+    nowISO(),
+  ]);
+}
+
+export async function updateVision(
+  db: SQLiteDatabase,
+  id: string,
+  patch: { title?: string; notes?: string | null },
+): Promise<void> {
+  const sets: string[] = [];
+  const params: string[] = [];
+  if (patch.title !== undefined) {
+    sets.push('title = ?');
+    params.push(patch.title);
+  }
+  if (patch.notes !== undefined) {
+    sets.push('notes = ?');
+    params.push(patch.notes ?? '');
+  }
+  if (sets.length === 0) return;
+  params.push(id);
+  await db.runAsync(`UPDATE visions SET ${sets.join(', ')} WHERE id = ?`, params);
+}

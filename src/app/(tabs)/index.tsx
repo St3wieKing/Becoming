@@ -1,7 +1,7 @@
 import { useRouter } from 'expo-router';
 import { useSQLiteContext } from 'expo-sqlite';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { FlatList, Pressable, StyleSheet, View } from 'react-native';
+import { Alert, FlatList, Pressable, StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { ThemedText } from '@/components/themed-text';
@@ -11,6 +11,7 @@ import { greeting, todayISO } from '@/core/util';
 import type { Task } from '@/core/types';
 import { coinBalance, recordCompletion, tasksForDate } from '@/db/repo';
 import { rewardFor } from '@/engine/economy';
+import { maybeAward } from '@/engine/achievements';
 import { frogWhy, pickFrog } from '@/engine/frog';
 import { useSettings } from '@/state/settings';
 
@@ -46,6 +47,10 @@ export default function HomeScreen() {
     });
     setJustAte(reward);
     await load();
+    const won = await maybeAward(db, todayISO());
+    if (won.length > 0) {
+      Alert.alert('Achievement unlocked', won.map((w) => w.title).join(', '));
+    }
   }, [db, frog, mode, load]);
 
   const completeTask = useCallback(
@@ -60,6 +65,10 @@ export default function HomeScreen() {
         reward,
       });
       await load();
+      const won = await maybeAward(db, todayISO());
+      if (won.length > 0) {
+        Alert.alert('Achievement unlocked', won.map((w) => w.title).join(', '));
+      }
     },
     [db, mode, load],
   );
@@ -91,6 +100,9 @@ export default function HomeScreen() {
               <ThemedText type="small">{coins} coins</ThemedText>
             </ThemedView>
           ) : null}
+          <Pressable style={styles.smallButton} onPress={() => router.push('/chat')}>
+            <ThemedText type="small">Ask AI</ThemedText>
+          </Pressable>
         </View>
 
         <ThemedText type="small">Today&apos;s Frog</ThemedText>

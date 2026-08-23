@@ -12,6 +12,7 @@ import type { GoalStatus, Task } from '@/core/types';
 import { addDaysISO, todayISO } from '@/core/util';
 import { CONFIDENCE_LABEL, STATUS_GLYPH } from '@/core/ui';
 import {
+  addCoinTx,
   addMilestone,
   addTask,
   getGoal,
@@ -22,6 +23,7 @@ import {
   toggleMilestone,
   updateGoal,
 } from '@/db/repo';
+import { maybeAward } from '@/engine/achievements';
 import { assessHealth } from '@/engine/health';
 import { rewardFor } from '@/engine/economy';
 import { useSettings } from '@/state/settings';
@@ -123,9 +125,18 @@ export default function GoalDetailScreen() {
   const changeStatus = useCallback(
     async (next: GoalStatus) => {
       await updateGoal(db, goalId, { status: next });
+      if (next === 'completed') {
+        if (mode === 'game') {
+          await addCoinTx(db, 100, 'Goal completed');
+        }
+        const won = await maybeAward(db, todayISO());
+        if (won.length > 0) {
+          Alert.alert('Achievement unlocked', won.map((w) => w.title).join(', '));
+        }
+      }
       await refresh();
     },
-    [db, goalId, refresh],
+    [db, goalId, mode, refresh],
   );
 
   const extendDeadline = useCallback(async () => {

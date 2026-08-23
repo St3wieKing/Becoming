@@ -11,6 +11,7 @@ import {
   distinctDoneDates,
   kvGet,
   primaryVision,
+  tasksForDate,
   totalDoneCount,
   weeklyStats,
 } from '@/db/repo';
@@ -23,6 +24,7 @@ export default function InsightsScreen() {
   const [totalDone, setTotalDone] = useState(0);
   const [visionTitle, setVisionTitle] = useState<string | null>(null);
   const [aiMode, setAiMode] = useState('off');
+  const [mvdLine, setMvdLine] = useState<string | null>(null);
 
   const load = useCallback(async () => {
     const today = todayISO();
@@ -38,6 +40,13 @@ export default function InsightsScreen() {
         const parsed = JSON.parse(raw) as { mode?: string };
         if (parsed.mode) setAiMode(parsed.mode);
       } catch {}
+    }
+    const open = (await tasksForDate(db, today)).filter((t) => !t.doneAt && !t.skipReason);
+    if (open.length > 0 && new Date().getHours() >= 17) {
+      const smallest = open.reduce((a, b) => (a.estimateMin <= b.estimateMin ? a : b));
+      setMvdLine(`Minimum Viable Day tonight: ${smallest.title} — just ${smallest.estimateMin} min keeps the goal alive.`);
+    } else {
+      setMvdLine(null);
     }
   }, [db]);
 
@@ -83,6 +92,7 @@ export default function InsightsScreen() {
             </View>
           }
           data={[
+            ...(mvdLine ? [{ key: 'mvd', line: `🌙 ${mvdLine}` }] : []),
             { key: 'stats', line: `${stats.completed} completed · ${stats.missed} not completed · ${stats.frogsDone} Frogs eaten` },
             { key: 'streak', line: streak > 0 ? `Current streak: ${streak} day(s)` : 'No active streak' },
             { key: 'total', line: `${totalDone} actions completed all-time` },

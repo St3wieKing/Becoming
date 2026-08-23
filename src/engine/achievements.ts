@@ -29,3 +29,36 @@ export function streakFromDates(datesDesc: string[], todayISODate: string): numb
   }
   return streak;
 }
+
+export interface NewlyUnlocked {
+  key: string;
+  title: string;
+}
+
+export async function maybeAward(
+  db: import('expo-sqlite').SQLiteDatabase,
+  todayISODate: string,
+): Promise<NewlyUnlocked[]> {
+  const { unlockedAchievements, unlockAchievements, totalDoneCount, frogDoneTotal, distinctDoneDates, completedGoalsCount } =
+    await import('@/db/repo');
+  const have = new Set(await unlockedAchievements(db));
+  const out: NewlyUnlocked[] = [];
+  const total = await totalDoneCount(db);
+  const frogs = await frogDoneTotal(db);
+  const streak = streakFromDates(await distinctDoneDates(db), todayISODate);
+  const goalsDone = await completedGoalsCount(db);
+  const test = (key: string, cond: boolean) => {
+    if (!cond || have.has(key)) return;
+    const def = ACHIEVEMENTS.find((a) => a.key === key);
+    if (def) out.push({ key: def.key, title: def.title });
+  };
+  test('first_step', total >= 1);
+  test('frog_hunter', frogs >= 10);
+  test('consistent', streak >= 7);
+  test('finisher', goalsDone >= 1);
+  if (out.length > 0) {
+    await unlockAchievements(db, out.map((o) => o.key));
+  }
+  return out;
+}
+
